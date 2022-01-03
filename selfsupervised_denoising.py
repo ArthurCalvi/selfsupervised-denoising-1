@@ -949,8 +949,13 @@ def main():
     eval_sets = {
         'kodak':  dict(validation_repeats=10),
         'bsd300': dict(validation_repeats=3),
-        'set14':  dict(validation_repeats=20)
+        'set14':  dict(validation_repeats=20),
+        'nih': dict(validation_repeats=1), #5000 images for one folder
+        'rsna': dict(validation_repeats=1), #200 images for one folder
+        'IXITiny': dict(validation_repeats=1), #566 images
+        'fmd': dict(validation_repeats=1)
     }
+
     if args.validation_set not in eval_sets:
         print ('Validation set specified with --validation-set not in one of: ' + ', '.join(eval_sets))
         sys.exit(1)
