@@ -5,6 +5,9 @@
 # http://creativecommons.org/licenses/by-nc/4.0/ or send a letter to
 # Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
+#custom datasets for evaluation :
+datasets = ['nih', 'rsna', 'IXITiny', 'fmd']
+
 import argparse
 import os
 import sys
@@ -155,10 +158,16 @@ def load_datasets(num_channels, dataset_dir, train_dataset, validation_dataset, 
         print("\nLoading done.")
         h5file.close()
 
-    if validation_dataset in ['kodak', 'bsd300', 'set14']:
+    if validation_dataset in ['kodak', 'bsd300', 'set14'] + datasets:
         paths = { 'kodak':  os.path.join(dataset_dir, 'kodak', '*.png'),
                   'bsd300': os.path.join(dataset_dir, 'BSDS300', 'images/test/*.jpg'),   # Just the 100 test images
-                  'set14':  os.path.join(dataset_dir, 'Set14', '*.png')}
+                  'set14':  os.path.join(dataset_dir, 'Set14', '*.png'),
+                  'nih': os.path.join(dataset_dir, 'nih', '*.png'), #1
+                  'rsna': os.path.join(dataset_dir, 'rsna', '*.png'), #1
+                  'IXITiny': os.path.join(dataset_dir, 'IXITiny', '*.png'), #1
+                  'fmd': os.path.join(dataset_dir, 'fmd', '*.png') #1
+                  }
+
         fn = submit.get_path_from_template(paths[validation_dataset])
         print("Loading validation dataset from '%s'." % fn)
         validation_images = [imageio.imread(x, ignoregamma=True) for x in glob.glob(fn)]
@@ -950,10 +959,10 @@ def main():
         'kodak':  dict(validation_repeats=10),
         'bsd300': dict(validation_repeats=3),
         'set14':  dict(validation_repeats=20),
-        'nih': dict(validation_repeats=1), #5000 images for one folder
-        'rsna': dict(validation_repeats=1), #200 images for one folder
-        'IXITiny': dict(validation_repeats=1), #566 images
-        'fmd': dict(validation_repeats=1)
+        'nih': dict(validation_repeats=1), #0 - 000 images for one folder
+        'rsna': dict(validation_repeats=1), #0 - 200 images for one folder
+        'IXITiny': dict(validation_repeats=1), #0 - 566 images
+        'fmd': dict(validation_repeats=1) #0
     }
 
     if args.validation_set not in eval_sets:
