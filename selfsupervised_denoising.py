@@ -6,7 +6,7 @@
 # Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
 #custom datasets for evaluation :
-datasets = ['nih', 'rsna', 'IXITiny', 'fmd']
+datasets = ['nih', 'rsna', 'IXITiny', 'fmd','darmsdadt', 'sidd']
 
 import argparse
 import os
@@ -165,7 +165,9 @@ def load_datasets(num_channels, dataset_dir, train_dataset, validation_dataset, 
                   'nih': os.path.join(dataset_dir, 'nih', '*.png'), #1
                   'rsna': os.path.join(dataset_dir, 'rsna', '*.png'), #1
                   'IXITiny': os.path.join(dataset_dir, 'IXITiny', '*.png'), #1
-                  'fmd': os.path.join(dataset_dir, 'fmd', '*.png') #1
+                  'fmd': os.path.join(dataset_dir, 'fmd', '*.png'), #1
+                  'darmsdadt': os.path.join(dataset_dir, 'darmsdadt', '*.png'), #2
+                  'sidd': os.path.join(dataset_dir, 'sidd', '*.png') #2
                   }
 
         fn = submit.get_path_from_template(paths[validation_dataset])
@@ -959,10 +961,12 @@ def main():
         'kodak':  dict(validation_repeats=10),
         'bsd300': dict(validation_repeats=3),
         'set14':  dict(validation_repeats=20),
-        'nih': dict(validation_repeats=1), #0 - 000 images for one folder
+        'nih': dict(validation_repeats=1), #0 - 5000 images for one folder
         'rsna': dict(validation_repeats=1), #0 - 200 images for one folder
         'IXITiny': dict(validation_repeats=1), #0 - 566 images
-        'fmd': dict(validation_repeats=1) #0
+        'fmd': dict(validation_repeats=1), #0
+        'darmsdadt': dict(validation_repeats=1), #2
+        'sidd': dict(validation_repeats=1) #2
     }
 
     if args.validation_set not in eval_sets:
