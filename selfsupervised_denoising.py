@@ -6,7 +6,7 @@
 # Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
 #custom datasets for evaluation :
-datasets = ['nih', 'rsna', 'IXITiny', 'fmd','darmsdadt', 'sidd']
+datasets = ['nih', 'rnsa', 'IXITiny', 'fmd','darmsdadt', 'sidd']
 
 import argparse
 import os
@@ -163,7 +163,7 @@ def load_datasets(num_channels, dataset_dir, train_dataset, validation_dataset, 
                   'bsd300': os.path.join(dataset_dir, 'BSDS300', 'images/test/*.jpg'),   # Just the 100 test images
                   'set14':  os.path.join(dataset_dir, 'Set14', '*.png'),
                   'nih': os.path.join(dataset_dir, 'nih', '*.png'), #1
-                  'rsna': os.path.join(dataset_dir, 'rsna', '*.png'), #1
+                  'rnsa': os.path.join(dataset_dir, 'rnsa', '*.png'), #1
                   'IXITiny': os.path.join(dataset_dir, 'IXITiny', '*.png'), #1
                   'fmd': os.path.join(dataset_dir, 'fmd', '*.png'), #1
                   'darmsdadt': os.path.join(dataset_dir, 'darmsdadt', '*.png'), #2
@@ -962,7 +962,7 @@ def main():
         'bsd300': dict(validation_repeats=3),
         'set14':  dict(validation_repeats=20),
         'nih': dict(validation_repeats=1), #0 - 5000 images for one folder
-        'rsna': dict(validation_repeats=1), #0 - 200 images for one folder
+        'rnsa': dict(validation_repeats=1), #0 - 200 images for one folder
         'IXITiny': dict(validation_repeats=1), #0 - 566 images
         'fmd': dict(validation_repeats=1), #0
         'darmsdadt': dict(validation_repeats=1), #2
