@@ -745,7 +745,7 @@ def train(submit_config,
     else:
         print('Training for %d images.' % num_iter)
 
-    for n in tqdm(range(0, num_iter + minibatch_size, minibatch_size)):
+    for n in range(0, num_iter + minibatch_size, minibatch_size):
         if ctx.should_stop():
             break
 
@@ -799,7 +799,7 @@ def train(submit_config,
                 valid_psnr_mu = 0.
                 valid_psnr_pme = 0.
                 bs = submit_config.num_gpus # Validation batch size.
-                for idx0 in range(0, len(validation_images), bs):
+                for idx0 in tqdm(range(0, len(validation_images), bs)):
                     num = min(bs, len(validation_images) - idx0)
                     idx = list(range(idx0, idx0 + bs))
                     idx = [min(x, len(validation_images) - 1) for x in idx]
