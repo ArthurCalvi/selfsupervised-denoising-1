@@ -28,6 +28,7 @@ import dnnlib
 import dnnlib.tflib
 import dnnlib.tflib.tfutil as tfutil
 from dnnlib.tflib.autosummary import autosummary
+from tqdm import tqdm
 import dnnlib.submission.submit as submit
 
 #----------------------------------------------------------------------------
@@ -744,7 +745,7 @@ def train(submit_config,
     else:
         print('Training for %d images.' % num_iter)
 
-    for n in range(0, num_iter + minibatch_size, minibatch_size):
+    for n in tqdm(range(0, num_iter + minibatch_size, minibatch_size)):
         if ctx.should_stop():
             break
 
