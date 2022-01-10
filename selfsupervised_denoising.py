@@ -6,7 +6,7 @@
 # Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
 #custom datasets for evaluation :
-datasets = ['nih', 'rnsa', 'IXITiny', 'fmd','darmsdadt', 'sidd']
+datasets = ['nih', 'rnsa', 'IXITiny', 'fmd','darmsdadt', 'sidd', 'test']
 
 import argparse
 import os
