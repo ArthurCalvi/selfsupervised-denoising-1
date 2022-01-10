@@ -684,6 +684,7 @@ def train(submit_config,
             else :
                 noisy_in_gpu = clean_in_split[gpu]
                 clean_in_gpu = clean_in_split[gpu]
+                noise_coeff = [float(p) / 255.0 for p in noise_style.replace('gauss', '', 1).split('_')][0]
             #MODIF end
 
             if pipeline == 'blindspot_mean':
