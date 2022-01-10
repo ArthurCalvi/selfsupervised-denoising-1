@@ -168,7 +168,8 @@ def load_datasets(num_channels, dataset_dir, train_dataset, validation_dataset, 
                   'IXITiny': os.path.join(dataset_dir, 'IXITiny', '*.png'), #1
                   'fmd': os.path.join(dataset_dir, 'fmd', '*.png'), #1
                   'darmsdadt': os.path.join(dataset_dir, 'darmsdadt', '*.png'), #2
-                  'sidd': os.path.join(dataset_dir, 'sidd', '*.png') #2
+                  'sidd': os.path.join(dataset_dir, 'sidd', '*.png'), #2
+                  'test': os.path.join(dataset_dir, 'test', '*.png') #3
                   }
 
         fn = submit.get_path_from_template(paths[validation_dataset])
@@ -976,7 +977,8 @@ def main():
         'IXITiny': dict(validation_repeats=1), #0 - 566 images
         'fmd': dict(validation_repeats=1), #0
         'darmsdadt': dict(validation_repeats=1), #2
-        'sidd': dict(validation_repeats=1) #2
+        'sidd': dict(validation_repeats=1), #2
+        'test': dict(validation_repeats=1)
     }
 
     if args.validation_set not in eval_sets:
