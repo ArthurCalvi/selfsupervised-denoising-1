@@ -1030,7 +1030,7 @@ def main():
         minibatch_size      = 4,
         learning_rate       = 3e-4,
         config_name         = config_name,
-        dataset_dir         = args.dataset_dir
+        dataset_dir         = args.dataset_dir,
         real_noise          = args.real_noise ##MODIF Arthur
     )
 
