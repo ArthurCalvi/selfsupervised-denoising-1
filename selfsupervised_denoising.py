@@ -607,7 +607,8 @@ def train(submit_config,
           eval_interval         = 10000,
           eval_network          = None,
           config_name           = None,
-          dataset_dir           = None):
+          dataset_dir           = None,
+          real_noise            = False):
 
     # Are we in evaluation mode?
     eval_mode = eval_network is not None
@@ -674,8 +675,15 @@ def train(submit_config,
     for gpu in range(submit_config.num_gpus):
         with tf.device("/gpu:%d" % gpu):
             net_gpu = net if gpu == 0 else net.clone()
-            clean_in_gpu = clean_in_split[gpu]
-            noisy_in_gpu, noise_coeff = noisify(clean_in_gpu, noise_style)
+
+            #MODIF Arthur
+            if not real_noise:
+                clean_in_gpu = clean_in_split[gpu]
+                noisy_in_gpu, noise_coeff = noisify(clean_in_gpu, noise_style)
+            else :
+                noisy_in_gpu = clean_in_split[gpu]
+                clean_in_gpu = clean_in_split[gpu]
+            #MODIF end
 
             if pipeline == 'blindspot_mean':
                 reference_in_gpu = noisy_in_gpu
@@ -956,6 +964,7 @@ def main():
     parser.add_argument('--validation-set', help='Evaluation dataset', default='kodak')
     parser.add_argument('--eval', help='Evaluate validation set with the given network pickle')
     parser.add_argument('--train', help='Train for the given config')
+    parser.add_argument('--real_noise', help='True or False') ##MODIF Arthur
     args = parser.parse_args()
 
     eval_sets = {
@@ -1020,6 +1029,7 @@ def main():
         learning_rate       = 3e-4,
         config_name         = config_name,
         dataset_dir         = args.dataset_dir
+        real_noise          = args.real_noise ##MODIF Arthur
     )
 
     selected_config = config_map[config_name]
@@ -1055,6 +1065,7 @@ def main():
 
     if config.get('eval_network'): sc.run_desc += '-EVAL_%s' % config_name
     if config.get('eval_network'): sc.run_dir_root += '/_eval'
+    if config.real_noise == 'True': print('Real noise used, images not noisified')
 
     # Submit.
     submit.submit_run(sc, 'selfsupervised_denoising.train', **config)
