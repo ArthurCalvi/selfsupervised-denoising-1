@@ -632,7 +632,7 @@ def train(submit_config,
 
     #MODIF Arthur
     if real_noise:
-        train_images, validation_images, validation_image_size = load_datasets(num_channels, dataset_dir+'_clean',
+        train_images, clean_validation_images, clean_validation_image_size = load_datasets(num_channels, dataset_dir+'_clean',
                                                                                None if eval_mode else train_dataset+'_clean',
                                                                                validation_dataset, prune_dataset)
     # Repeat validation set if asked to.
