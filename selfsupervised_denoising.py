@@ -6,7 +6,7 @@
 # Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
 #custom datasets for evaluation :
-datasets = ['nih', 'rnsa', 'IXITiny', 'fmd','darmsdadt', 'sidd', 'test']
+datasets = ['nih', 'rnsa', 'IXITiny', 'fmd','darmsdadt', 'sidd', 'test', 'test_clean']
 
 import argparse
 import os
@@ -169,7 +169,8 @@ def load_datasets(num_channels, dataset_dir, train_dataset, validation_dataset, 
                   'fmd': os.path.join(dataset_dir, 'fmd', '*.png'), #1
                   'darmsdadt': os.path.join(dataset_dir, 'darmsdadt', '*.png'), #2
                   'sidd': os.path.join(dataset_dir, 'sidd', '*.png'), #2
-                  'test': os.path.join(dataset_dir, 'test', '*.png') #3
+                  'test': os.path.join(dataset_dir, 'test', '*.png'),
+                  'test_clean': os.path.join(dataset_dir, 'test_clean', '*.png')#3
                   }
 
         fn = submit.get_path_from_template(paths[validation_dataset])
