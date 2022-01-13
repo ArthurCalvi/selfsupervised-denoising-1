@@ -630,6 +630,11 @@ def train(submit_config,
     # Load the data.
     train_images, validation_images, validation_image_size = load_datasets(num_channels, dataset_dir, None if eval_mode else train_dataset, validation_dataset, prune_dataset)
 
+    #MODIF Arthur
+    if real_noise:
+        train_images, validation_images, validation_image_size = load_datasets(num_channels, dataset_dir+'_clean',
+                                                                               None if eval_mode else train_dataset+'_clean',
+                                                                               validation_dataset, prune_dataset)
     # Repeat validation set if asked to.
     original_validation_image_count = len(validation_images) # Avoid exporting the duplicate images.
     if validation_repeats > 1:
@@ -822,7 +827,21 @@ def train(submit_config,
                         img = np.pad(img, [[0, 0], [0, 0], [0, validation_image_size[0] - sz[0]], [0, validation_image_size[1] - sz[1]]], 'reflect')
                         val_input.append(img)
                         val_sz.append(sz)
+
+                        #MODIF Arthur
+                        if real_noise:
+                            clean_img = clean_validation_images[i][np.newaxis, ...]
+                            clean_img = adjust_dynamic_range(clean_img, [0, 255], [0.0, 1.0])
+                            clean_sz = clean_img.shape[2:]
+                            clean_img = np.pad(clean_img, [[0, 0], [0, 0], [0, validation_image_size[0] - clean_sz[0]],
+                                               [0, validation_image_size[1] - clean_sz[1]]], 'reflect')
+                            clean_val_input.append(clean_img)
+                            clean_val_sz.append(clean_sz)
+
                     val_input = np.concatenate(val_input, axis=0) # Batch of validation images.
+
+                    #MODIF Arthur
+                    clean_val_input = np.concatenate(clean_val_input, axis=0)
 
                     # Run the actual step.
                     feed_dict = {clean_in: val_input}
@@ -830,7 +849,14 @@ def train(submit_config,
 
                     # Process the result images.
                     for i, j in enumerate(idx[:num]):
-                        crop_val_input, crop_mu_x, crop_pme, crop_noisy = [x[i, :, :val_sz[i][0], :val_sz[i][1]] for x in [val_input, mu_x, pme, noisy]]
+
+                        #MODIF Arthur
+                        if real_noise:
+                            crop_val_input, crop_mu_x, crop_pme, crop_noisy = [x[i, :, :clean_val_sz[i][0], :clean_val_sz[i][1]] for
+                                                                               x in [clean_val_input, mu_x, pme, noisy]]
+                        else:
+                            crop_val_input, crop_mu_x, crop_pme, crop_noisy = [x[i, :, :val_sz[i][0], :val_sz[i][1]] for x in [val_input, mu_x, pme, noisy]]
+
                         crop_net_std = net_std[i, :val_sz[i][0], :val_sz[i][1]] # HW grayscale
                         crop_net_std /= 10.0 / 255.0 # white = 10 ULPs in U8.
                         valid_psnr_mu += calculate_psnr(crop_mu_x, crop_val_input) / len(validation_images)
