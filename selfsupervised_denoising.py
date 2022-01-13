@@ -821,6 +821,8 @@ def train(submit_config,
                     idx = [min(x, len(validation_images) - 1) for x in idx]
                     val_input = []
                     val_sz = []
+                    clean_val_input = []
+                    clean_val_sz = []
                     for i in idx:
                         img = validation_images[i][np.newaxis, ...]
                         img = adjust_dynamic_range(img, [0, 255], [0.0, 1.0])
