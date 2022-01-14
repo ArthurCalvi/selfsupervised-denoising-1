@@ -6,7 +6,7 @@
 # Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
 #custom datasets for evaluation :
-datasets = ['nih', 'rnsa', 'IXITiny', 'fmd','darmsdadt', 'sidd', 'test', 'test_clean']
+datasets = ['nih', 'rnsa', 'IXITiny', 'fmd','darmsdadt', 'sidd', 'test', 'test_clean', 'ssid_small']
 
 import argparse
 import os
@@ -170,7 +170,10 @@ def load_datasets(num_channels, dataset_dir, train_dataset, validation_dataset, 
                   'darmsdadt': os.path.join(dataset_dir, 'darmsdadt', '*.png'), #2
                   'sidd': os.path.join(dataset_dir, 'sidd', '*.png'), #2
                   'test': os.path.join(dataset_dir, 'test', '*.png'),
-                  'test_clean': os.path.join(dataset_dir, 'test_clean', '*.png')#3
+                  'test_clean': os.path.join(dataset_dir, 'test_clean', '*.png'),#3
+                  'ssid_small': os.path.join(dataset_dir, 'ssid_small', '*.png'),
+                  'ssid_small_clean': os.path.join(dataset_dir, 'ssid_small_clean', ' *.png
+        ')
                   }
 
         fn = submit.get_path_from_template(paths[validation_dataset])
@@ -1014,7 +1017,8 @@ def main():
         'fmd': dict(validation_repeats=1), #0
         'darmsdadt': dict(validation_repeats=1), #2
         'sidd': dict(validation_repeats=1), #2
-        'test': dict(validation_repeats=1)
+        'test': dict(validation_repeats=1),
+        'ssid_small': dict(validation_repeats=1)
     }
 
     if args.validation_set not in eval_sets:
