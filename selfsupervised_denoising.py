@@ -777,11 +777,12 @@ def train(submit_config,
         if not eval_mode:
             # Get clean images from training set.
             clean = np.zeros([minibatch_size, num_channels, train_resolution, train_resolution], dtype=np.uint8)
+
             for i, j in enumerate(next(index_generator)):
                 clean[i] = random_crop_numpy(train_images[j], train_resolution)
             clean = adjust_dynamic_range(clean, [0, 255], [0.0, 1.0])
 
-            # Run training step.
+            # Run training step. #TODO change here
             feed_dict = {clean_in: clean, learning_rate_in: lr, L_exponent_in: L_exponent}
             loss_val, psnr_val, psnr_pme_val, net_std_val, noise_std_val, _ = tfutil.run([train_loss, train_psnr, train_psnr_pme, net_std_out, noise_std_out, train_step], feed_dict)
 
@@ -847,7 +848,12 @@ def train(submit_config,
                     clean_val_input = np.concatenate(clean_val_input, axis=0)
 
                     # Run the actual step.
-                    feed_dict = {clean_in: val_input}
+                    #MODIF Arthur
+                    if not real_noise:
+                        feed_dict = {clean_in: val_input}
+                    else :
+                        feed_dict = {clean_in: clean_val_input}
+
                     mu_x, net_std, pme, noisy = tfutil.run([mu_x_out, net_std_out, pme_out, noisy_out], feed_dict)
 
                     # Process the result images.
