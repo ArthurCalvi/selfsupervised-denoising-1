@@ -827,12 +827,6 @@ def train(submit_config,
                     clean_val_input = []
                     clean_val_sz = []
                     for i in idx:
-                        img = validation_images[i][np.newaxis, ...]
-                        img = adjust_dynamic_range(img, [0, 255], [0.0, 1.0])
-                        sz = img.shape[2:]
-                        img = np.pad(img, [[0, 0], [0, 0], [0, validation_image_size[0] - sz[0]], [0, validation_image_size[1] - sz[1]]], 'reflect')
-                        val_input.append(img)
-                        val_sz.append(sz)
 
                         #MODIF Arthur
                         if real_noise:
@@ -844,17 +838,24 @@ def train(submit_config,
                             clean_val_input.append(clean_img)
                             clean_val_sz.append(clean_sz)
 
-                    val_input = np.concatenate(val_input, axis=0) # Batch of validation images.
 
-                    #MODIF Arthur
-                    clean_val_input = np.concatenate(clean_val_input, axis=0)
+                        img = validation_images[i][np.newaxis, ...]
+                        img = adjust_dynamic_range(img, [0, 255], [0.0, 1.0])
+                        sz = img.shape[2:]
+                        img = np.pad(img, [[0, 0], [0, 0], [0, validation_image_size[0] - sz[0]],
+                                           [0, validation_image_size[1] - sz[1]]], 'reflect')
+                        val_input.append(img)
+                        val_sz.append(sz)
+
 
                     # Run the actual step.
                     #MODIF Arthur
-                    if not real_noise:
-                        feed_dict = {clean_in: val_input}
-                    else :
-                        feed_dict = {clean_in: clean_val_input}
+                    #if not real_noise:
+                    val_input = np.concatenate(val_input, axis=0)  # Batch of validation images.
+                    feed_dict = {clean_in: val_input}
+                    if real_noise:
+                        clean_val_input = np.concatenate(clean_val_input, axis=0)
+                    #feed_dict = {clean_in: clean_val_input}
 
                     mu_x, net_std, pme, noisy = tfutil.run([mu_x_out, net_std_out, pme_out, noisy_out], feed_dict)
 
