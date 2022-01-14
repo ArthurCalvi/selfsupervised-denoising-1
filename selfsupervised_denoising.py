@@ -172,8 +172,7 @@ def load_datasets(num_channels, dataset_dir, train_dataset, validation_dataset, 
                   'test': os.path.join(dataset_dir, 'test', '*.png'),
                   'test_clean': os.path.join(dataset_dir, 'test_clean', '*.png'),#3
                   'ssid_small': os.path.join(dataset_dir, 'ssid_small', '*.png'),
-                  'ssid_small_clean': os.path.join(dataset_dir, 'ssid_small_clean', ' *.png
-        ')
+                  'ssid_small_clean': os.path.join(dataset_dir, 'ssid_small_clean', ' *.png')
                   }
 
         fn = submit.get_path_from_template(paths[validation_dataset])
