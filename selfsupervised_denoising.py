@@ -849,16 +849,14 @@ def train(submit_config,
 
 
                     # Run the actual step.
-                    #MODIF Arthur
-                    #if not real_noise:
+
                     val_input = np.concatenate(val_input, axis=0)  # Batch of validation images.
                     feed_dict = {clean_in: val_input}
-                    #else :
 
                     #MODIF Arthur
                     if real_noise:
                         clean_val_input = np.concatenate(clean_val_input, axis=0)
-                    #   feed_dict = {clean_in: clean_val_input}
+
 
                     mu_x, net_std, pme, noisy = tfutil.run([mu_x_out, net_std_out, pme_out, noisy_out], feed_dict)
 
