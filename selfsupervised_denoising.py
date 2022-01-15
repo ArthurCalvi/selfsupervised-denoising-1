@@ -853,21 +853,18 @@ def train(submit_config,
                     #if not real_noise:
                     val_input = np.concatenate(val_input, axis=0)  # Batch of validation images.
                     feed_dict = {clean_in: val_input}
-                    if real_noise:
-                        clean_val_input = np.concatenate(clean_val_input, axis=0)
-                    #feed_dict = {clean_in: clean_val_input}
+                    #else :
+
+                    #   clean_val_input = np.concatenate(clean_val_input, axis=0)
+                    #   feed_dict = {clean_in: clean_val_input}
 
                     mu_x, net_std, pme, noisy = tfutil.run([mu_x_out, net_std_out, pme_out, noisy_out], feed_dict)
 
                     # Process the result images.
                     for i, j in enumerate(idx[:num]):
 
-                        #MODIF Arthur
-                        if real_noise:
-                            crop_val_input, crop_mu_x, crop_pme, crop_noisy = [x[i, :, :clean_val_sz[i][0], :clean_val_sz[i][1]] for
-                                                                               x in [clean_val_input, mu_x, pme, noisy]]
-                        else:
-                            crop_val_input, crop_mu_x, crop_pme, crop_noisy = [x[i, :, :val_sz[i][0], :val_sz[i][1]] for x in [val_input, mu_x, pme, noisy]]
+
+                        crop_val_input, crop_mu_x, crop_pme, crop_noisy = [x[i, :, :val_sz[i][0], :val_sz[i][1]] for x in [val_input, mu_x, pme, noisy]]
 
                         crop_net_std = net_std[i, :val_sz[i][0], :val_sz[i][1]] # HW grayscale
                         crop_net_std /= 10.0 / 255.0 # white = 10 ULPs in U8.
