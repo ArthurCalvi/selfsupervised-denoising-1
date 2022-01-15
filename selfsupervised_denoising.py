@@ -863,8 +863,12 @@ def train(submit_config,
                     # Process the result images.
                     for i, j in enumerate(idx[:num]):
 
-
-                        crop_val_input, crop_mu_x, crop_pme, crop_noisy = [x[i, :, :val_sz[i][0], :val_sz[i][1]] for x in [val_input, mu_x, pme, noisy]]
+                        #MODIF Arthur
+                        if real_noise:
+                            crop_val_input, crop_mu_x, crop_pme, crop_noisy = [x[i, :, :clean_val_sz[i][0], :clean_val_sz[i][1]] for
+                                                                               x in [clean_val_input, mu_x, pme, noisy]]
+                        else:
+                            crop_val_input, crop_mu_x, crop_pme, crop_noisy = [x[i, :, :val_sz[i][0], :val_sz[i][1]] for x in [val_input, mu_x, pme, noisy]]
 
                         crop_net_std = net_std[i, :val_sz[i][0], :val_sz[i][1]] # HW grayscale
                         crop_net_std /= 10.0 / 255.0 # white = 10 ULPs in U8.
