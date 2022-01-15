@@ -855,7 +855,9 @@ def train(submit_config,
                     feed_dict = {clean_in: val_input}
                     #else :
 
-                    #   clean_val_input = np.concatenate(clean_val_input, axis=0)
+                    #MODIF Arthur
+                    if real_noise:
+                        clean_val_input = np.concatenate(clean_val_input, axis=0)
                     #   feed_dict = {clean_in: clean_val_input}
 
                     mu_x, net_std, pme, noisy = tfutil.run([mu_x_out, net_std_out, pme_out, noisy_out], feed_dict)
