@@ -324,6 +324,7 @@ def blindspot_pipeline(noisy_in,
                        input_shape          = None,
                        noise_style          = None,
                        noise_params         = None,
+                       signal_dependant     = False, #MODIF Arthur
                        **_kwargs):
 
     num_channels = input_shape[1]
@@ -444,6 +445,11 @@ def blindspot_pipeline(noisy_in,
             loss_out = 0.5 * tf.log(dets) - diff # NHW
             if noise_params != 'known':
                 loss_out = loss_out - 0.1 * tf.reduce_mean(noise_std, axis=1) # Balance regularization.
+
+            #MODIF Arthur
+            if signal_dependant:
+                mu_x2 = mu_x2 + noisy_in2
+                sigma_n = sigma_n + noisy_in2
 
             # Posterior mean estimate.
             sigma_x_inv = tf.linalg.inv(sigma_x + Ieps) # NHWCC
@@ -612,7 +618,8 @@ def train(submit_config,
           eval_network          = None,
           config_name           = None,
           dataset_dir           = None,
-          real_noise            = False):
+          real_noise            = False,
+          signal_dependant      = False):
 
     # Are we in evaluation mode?
     eval_mode = eval_network is not None
@@ -658,7 +665,7 @@ def train(submit_config,
             if noise_style.startswith('impulse'): net_noise_style = 'impulse'
 
             if pipeline == 'blindspot':
-                net = dnnlib.tflib.Network('net', 'selfsupervised_denoising.blindspot_pipeline', input_shape=input_shape, noise_style=net_noise_style, noise_params=noise_params, diagonal_covariance=diagonal_covariance)
+                net = dnnlib.tflib.Network('net', 'selfsupervised_denoising.blindspot_pipeline', input_shape=input_shape, noise_style=net_noise_style, noise_params=noise_params, diagonal_covariance=diagonal_covariance, signal_dependant=signal_dependant)
             elif pipeline == 'blindspot_mean':
                 net = dnnlib.tflib.Network('net', 'selfsupervised_denoising.simple_pipeline', input_shape=input_shape, noise_style=net_noise_style, blindspot=True, noisy_targets=True)
             elif pipeline == 'n2c':
@@ -1006,6 +1013,7 @@ def main():
     parser.add_argument('--eval', help='Evaluate validation set with the given network pickle')
     parser.add_argument('--train', help='Train for the given config')
     parser.add_argument('--real_noise', help='True or False') ##MODIF Arthur
+    parser.add_argument('--signal_dependant', help='True or False')
     args = parser.parse_args()
 
     eval_sets = {
@@ -1072,7 +1080,8 @@ def main():
         learning_rate       = 3e-4,
         config_name         = config_name,
         dataset_dir         = args.dataset_dir,
-        real_noise          = args.real_noise ##MODIF Arthur
+        real_noise          = args.real_noise, ##MODIF Arthur
+        signal_dependant    = args.signal_dependant
     )
 
     selected_config = config_map[config_name]
@@ -1109,6 +1118,7 @@ def main():
     if config.get('eval_network'): sc.run_desc += '-EVAL_%s' % config_name
     if config.get('eval_network'): sc.run_dir_root += '/_eval'
     if config.real_noise == 'True': print('Real noise used, images not noisified')
+    if config.signal_dependant == 'True': print('Signal dependant pme')
 
     # Submit.
     submit.submit_run(sc, 'selfsupervised_denoising.train', **config)
