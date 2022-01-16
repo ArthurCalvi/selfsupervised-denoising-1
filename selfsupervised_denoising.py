@@ -447,6 +447,7 @@ def blindspot_pipeline(noisy_in,
                 loss_out = loss_out - 0.1 * tf.reduce_mean(noise_std, axis=1) # Balance regularization.
 
             #MODIF Arthur
+            print('Not ok')
             if signal_dependant:
                 print('signal dependant noise!')
                 mu_x2 = mu_x2 + noisy_in2
