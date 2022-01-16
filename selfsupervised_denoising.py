@@ -448,6 +448,7 @@ def blindspot_pipeline(noisy_in,
 
             #MODIF Arthur
             if signal_dependant:
+                print('signal dependant noise!')
                 mu_x2 = mu_x2 + noisy_in2
                 sigma_n = sigma_n + noisy_in2
 
