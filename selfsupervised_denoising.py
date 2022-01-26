@@ -502,6 +502,7 @@ def blindspot_pipeline(noisy_in,
             net_std_out = tf.maximum(zero64, tf.linalg.det(sigma_x))**(1.0/6.0) # NHW. Cube root of volumetric scaling factor.
             noise_std_out = alpha[..., 0, 0] / 255.0 * 100.0 # N11 / NHW. Shows as percentage in output.
 
+    print('noise param :', noise_est_out)
     return mu_x, pme_out, loss_out, net_std_out, noise_std_out
 
 #----------------------------------------------------------------------------
