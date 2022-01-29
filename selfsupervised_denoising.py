@@ -6,7 +6,7 @@
 # Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
 
 #custom datasets for evaluation :
-datasets = ['nih', 'rnsa', 'IXITiny', 'fmd','darmsdadt', 'sidd', 'test', 'test_clean', 'ssid_small', 'ssid_small_clean']
+datasets = ['nih', 'rnsa', 'IXITiny', 'fmd','fmd2', 'fmd4', 'fmd8', 'fmd16', 'fmdraw','fmd_clean','fmd2_clean', 'fmd4_clean', 'fmd8_clean', 'fmd16_clean', 'fmdraw_clean','darmsdadt', 'sidd', 'test', 'test_clean', 'ssid_small', 'ssid_small_clean']
 
 import argparse
 import os
@@ -160,20 +160,33 @@ def load_datasets(num_channels, dataset_dir, train_dataset, validation_dataset, 
         h5file.close()
 
     if validation_dataset in ['kodak', 'bsd300', 'set14'] + datasets:
-        paths = { 'kodak':  os.path.join(dataset_dir, 'kodak', '*.png'),
-                  'bsd300': os.path.join(dataset_dir, 'BSDS300', 'images/test/*.jpg'),   # Just the 100 test images
+        paths = {'kodak':  os.path.join(dataset_dir, 'kodak', '*.png'),
+                 'bsd300': os.path.join(dataset_dir, 'BSDS300', 'images/test/*.jpg'),  # Just the 100 test images
                   'set14':  os.path.join(dataset_dir, 'Set14', '*.png'),
-                  'nih': os.path.join(dataset_dir, 'nih', '*.png'), #1
-                  'rnsa': os.path.join(dataset_dir, 'rnsa', '*.png'), #1
-                  'IXITiny': os.path.join(dataset_dir, 'IXITiny', '*.png'), #1
-                  'fmd': os.path.join(dataset_dir, 'fmd', '*.png'), #1
-                  'darmsdadt': os.path.join(dataset_dir, 'darmsdadt', '*.png'), #2
-                  'sidd': os.path.join(dataset_dir, 'sidd', '*.png'), #2
+                  'nih': os.path.join(dataset_dir, 'nih', '*.png'),  #1
+                  'rnsa': os.path.join(dataset_dir, 'rnsa', '*.png'),  #1
+                  'IXITiny': os.path.join(dataset_dir, 'IXITiny', '*.png'),  #1
+                  'fmd': os.path.join(dataset_dir, 'fmd', '*.png'),  #1
+                  'fmd2': os.path.join(dataset_dir, 'fmd2', '*.png'),  # 1
+                  'fmd4': os.path.join(dataset_dir, 'fmd4', '*.png'),  # 1
+                  'fmd8': os.path.join(dataset_dir, 'fmd8', '*.png'),  # 1
+                  'fmd16': os.path.join(dataset_dir, 'fmd16', '*.png'),  # 1
+                  'fmd32': os.path.join(dataset_dir, 'fmd32', '*.png'),  # 1
+                  'fmdraw': os.path.join(dataset_dir, 'fmdraw', '*.png'),  # 1
+                  'fmd_clean': os.path.join(dataset_dir, 'fmd_clean', '*.png'),  # 1
+                  'fmd2_clean': os.path.join(dataset_dir, 'fmd2_clean', '*.png'),  # 1
+                  'fmd4_clean': os.path.join(dataset_dir, 'fmd4_clean', '*.png'),  # 1
+                  'fmd8_clean': os.path.join(dataset_dir, 'fmd8_clean', '*.png'),  # 1
+                  'fmd16_clean': os.path.join(dataset_dir, 'fmd16_clean', '*.png'),  # 1
+                  'fmd32_clean': os.path.join(dataset_dir, 'fmd32_clean', '*.png'),  # 1
+                  'fmdraw_clean': os.path.join(dataset_dir, 'fmdraw_clean', '*.png'),  # 1
+                  'darmsdadt': os.path.join(dataset_dir, 'darmsdadt', '*.png'),  #2
+                  'sidd': os.path.join(dataset_dir, 'sidd', '*.png'),  #2
                   'test': os.path.join(dataset_dir, 'test', '*.png'),
-                  'test_clean': os.path.join(dataset_dir, 'test_clean', '*.png'),#3
+                  'test_clean': os.path.join(dataset_dir, 'test_clean', '*.png'),  #3
                   'ssid_small': os.path.join(dataset_dir, 'ssid_small', '*.png'),
-                  'ssid_small_clean': os.path.join(dataset_dir, 'ssid_small_clean', '*.png')
-                  }
+                 'ssid_small_clean': os.path.join(dataset_dir, 'ssid_small_clean', '*.png')
+                 }
 
         fn = submit.get_path_from_template(paths[validation_dataset])
         print("Loading validation dataset from '%s'." % fn)
@@ -502,7 +515,6 @@ def blindspot_pipeline(noisy_in,
             net_std_out = tf.maximum(zero64, tf.linalg.det(sigma_x))**(1.0/6.0) # NHW. Cube root of volumetric scaling factor.
             noise_std_out = alpha[..., 0, 0] / 255.0 * 100.0 # N11 / NHW. Shows as percentage in output.
 
-    print('noise param :', noise_est_out)
     return mu_x, pme_out, loss_out, net_std_out, noise_std_out
 
 #----------------------------------------------------------------------------
@@ -1027,6 +1039,12 @@ def main():
         'rnsa': dict(validation_repeats=1), #0 - 200 images for one folder
         'IXITiny': dict(validation_repeats=1), #0 - 566 images
         'fmd': dict(validation_repeats=1), #0
+        'fmd2': dict(validation_repeats=1),
+        'fmd4': dict(validation_repeats=1),
+        'fmd8': dict(validation_repeats=1),
+        'fmd16': dict(validation_repeats=1),
+        'fmd32': dict(validation_repeats=1),
+        'fmdraw': dict(validation_repeats=1),
         'darmsdadt': dict(validation_repeats=1), #2
         'sidd': dict(validation_repeats=1), #2
         'test': dict(validation_repeats=1),
